@@ -1,0 +1,15 @@
+{
+  "name": "konya-ulasim-plus",
+  "version": "1.0.0",
+  "description": "Konya ATUS tabanlı akıllı toplu taşıma uygulaması",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5"
+  }
+}
