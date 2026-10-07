@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Konya Ulaşım Plus</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2e;
+      --panel2: #12243a;
+      --border: rgba(255,255,255,.08);
+      --text: #f7faff;
+      --muted: #91a4bb;
+      --accent: #42d392;
+      --accent2: #27a9ff;
+      --danger: #ff647c;
+      --warning: #ffc857;
+      --shadow: 0 18px 50px rgba(0,0,0,.28);
+      --radius: 22px;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(39,169,255,.18), transparent 35%),
+        radial-gradient(circle at 90% 0%, rgba(66,211,146,.13), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      padding-bottom: 90px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(100%, 760px);
+      margin: auto;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 18px 16px 14px;
+      backdrop-filter: blur(22px);
+      background: rgba(7,17,31,.82);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(145deg, #42d392, #1b9dff);
+      box-shadow: 0 10px 30px rgba(39,169,255,.2);
+      font-size: 23px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -.4px;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--warning);
+      box-shadow: 0 0 0 5px rgba(255,200,87,.08);
+    }
+
+    .status-dot.ok {
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(66,211,146,.08);
+    }
+
+    .status-dot.error {
+      background: var(--danger);
+      box-shadow: 0 0 0 5px rgba(255,100,124,.08);
+    }
+
+    /* CONTENT */
+
+    main {
+      padding: 16px;
+    }
+
+    .hero {
+      padding: 22px;
+      border-radius: 28px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(18,36,58,.98),
+          rgba(11,28,47,.96)
+        );
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 15px;
+    }
+
+    .hero-title {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -.8px;
+      margin: 0;
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      margin: 7px 0 18px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .location-btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 17px;
+      color: #06131f;
+      background: linear-gradient(135deg, #42d392, #5ee7ad);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 12px 28px rgba(66,211,146,.16);
+    }
+
+    .location-btn.loading {
+      opacity: .7;
+      pointer-events: none;
+    }
+
+    /* SEARCH */
+
+    .section {
+      margin-top: 16px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .section-caption {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 1px solid var(--border);
+      outline: none;
+      color: var(--text);
+      background: rgba(13,27,46,.92);
+      padding: 16px 48px 16px 17px;
+      border-radius: 18px;
+      transition: .2s;
+    }
+
+    .search-box input:focus {
+      border-color: rgba(66,211,146,.5);
+      box-shadow: 0 0 0 4px rgba(66,211,146,.07);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 17px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .55;
+    }
+
+    .search-results {
+      display: none;
+      margin-top: 8px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .search-results.show {
+      display: block;
+    }
+
+    .search-result {
+      width: 100%;
+      padding: 13px 15px;
+      color: var(--text);
+      background: transparent;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .search-result:last-child {
+      border-bottom: 0;
+    }
+
+    .search-result:active {
+      background: var(--panel2);
+    }
+
+    .result-name {
+      font-weight: 750;
+      font-size: 14px;
+    }
+
+    .result-meta {
+      color: var(--muted);
+      margin-top: 3px;
+      font-size: 11px;
+    }
+
+    /* DESTINATION */
+
+    .selected-destination {
+      display: none;
+      margin-top: 10px;
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(66,211,146,.2);
+      background: rgba(66,211,146,.07);
+    }
+
+    .selected-destination.show {
+      display: block;
+    }
+
+    .destination-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .destination-name {
+      font-weight: 800;
+    }
+
+    .clear-btn {
+      color: var(--danger);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .find-route-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #249fff, #48c5ff);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(36,159,255,.16);
+    }
+
+    /* QUICK */
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .quick {
+      min-height: 74px;
+      padding: 8px 5px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(13,27,46,.9);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .quick-icon {
+      font-size: 20px;
+    }
+
+    .quick-name {
+      font-size: 10px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.15;
+    }
+
+    .quick:active {
+      transform: scale(.97);
+      background: var(--panel2);
+    }
+
+    /* STOP CARDS */
+
+    .list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .stop-card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(13,27,46,.88);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stop-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(39,169,255,.1);
+      font-size: 20px;
+    }
+
+    .stop-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .stop-name {
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stop-info {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .route-chips {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .route-chip {
+      white-space: nowrap;
+      padding: 3px 7px;
+      border-radius: 7px;
+      font-size: 9px;
+      background: rgba(255,255,255,.06);
+      color: #b9c9da;
+    }
+
+    .distance {
+      text-align: right;
+      flex: 0 0 auto;
+    }
+
+    .distance strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .distance span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .select-stop {
+      margin-top: 7px;
+      padding: 6px 9px;
+      border-radius: 9px;
+      background: rgba(66,211,146,.1);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    /* JOURNEYS */
+
+    .journey-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(18,36,58,.95),
+          rgba(13,27,46,.95)
+        );
+      box-shadow: 0 10px 35px rgba(0,0,0,.15);
+    }
+
+    .journey-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .route-number {
+      display: inline-flex;
+      padding: 7px 11px;
+      border-radius: 11px;
+      background: rgba(66,211,146,.12);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .journey-duration {
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .journey-route-name {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .time {
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .place {
+      font-size: 12px;
+      color: #d8e2ee;
+      line-height: 1.4;
+    }
+
+    .journey-line {
+      position: relative;
+      margin: 3px 0;
+      height: 28px;
+      border-left: 2px solid rgba(66,211,146,.35);
+      margin-left: 31px;
+    }
+
+    .journey-line::before,
+    .journey-line::after {
+      content: "";
+      position: absolute;
+      left: -5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .journey-line::before {
+      top: 0;
+    }
+
+    .journey-line::after {
+      bottom: 0;
+    }
+
+    .journey-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 13px;
+    }
+
+    .journey-tag {
+      padding: 6px 8px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.05);
+      color: #b9c9da;
+      font-size: 10px;
+    }
+
+    /* EMPTY / ERROR */
+
+    .message {
+      padding: 20px;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      border-color: rgba(255,100,124,.22);
+      background: rgba(255,100,124,.04);
+    }
+
+    .retry {
+      margin-top: 10px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* DATA STATUS */
+
+    .data-status {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(13,27,46,.85);
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 6px 0;
+      font-size: 11px;
+    }
+
+    .data-row span:first-child {
+      color: var(--muted);
+    }
+
+    .data-row span:last-child {
+      text-align: right;
+      font-weight: 700;
+    }
+
+    /* BOTTOM NAV */
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 30;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      width: min(calc(100% - 24px), 700px);
+      padding: 8px;
+      border-radius: 22px;
+      background: rgba(9,22,38,.92);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.4);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .nav-btn {
+      padding: 10px;
+      border-radius: 15px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .nav-btn.active {
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 3px;
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 95px;
+      transform: translate(-50%, 20px);
+      width: min(calc(100% - 30px), 500px);
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: #13243a;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (min-width: 600px) {
+      main {
+        padding: 22px;
+      }
+
+      .quick-grid {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="brand-left">
+        <div class="logo">🚌</div>
+        <div>
+          <h1>Konya Ulaşım Plus</h1>
+          <p>Akıllı toplu taşıma asistanı</p>
+        </div>
+      </div>
+
+      <div
+        id="statusDot"
+        class="status-dot"
+        title="Sunucu durumu"
+      ></div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+      <h2 class="hero-title">
+        Konya'da yolculuğunu planla
+      </h2>
+
+      <p class="hero-subtitle">
+        Konumundan en yakın durakları bul,
+        hedefini seç ve mevcut resmî ulaşım
+        verilerine göre seferleri görüntüle.
+      </p>
+
+      <button
+        id="locationBtn"
+        class="location-btn"
+      >
+        📍 Konumumu Bul
+      </button>
+    </section>
+
+    <!-- DESTINATION SEARCH -->
+
+    <section class="section">
+
+      <div class="section-head">
+        <h3 class="section-title">
+          Nereye gideceksin?
+        </h3>
+
+        <span class="section-caption">
+          Durak ara
+        </span>
+      </div>
+
+      <div class="search-box">
+        <input
+          id="destinationSearch"
+          type="search"
+          autocomplete="off"
+          placeholder="Örn. Kaşgarlı Mahmut"
+        />
+
+        <span class="search-icon">🔎</span>
+      </div>
+
+      <div
+        id="searchResults"
+        class="search-results"
+      ></div>
+
+      <div
+        id="selectedDestination"
+        class="selected-destination"
+      >
+        <div class="destination-row">
+
+          <div>
+            <div
+              id="selectedDestinationName"
+              class="destination-name"
+            ></div>
+
+            <div
+              id="selectedDestinationMeta"
+              class="result-meta"
+            ></div>
+          </div>
+
+          <button
+            id="clearDestination"
+            class="clear-btn"
+          >
+            Temizle
+          </button>
+
+        </div>
+
+        <button
+          id="findRouteBtn"
+          class="find-route-btn"
+        >
+          🧭 Yolculuğu Hesapla
+        </button>
+      </div>
+
+    </section>
+
+    <!-- QUICK STOPS -->
+
+    <section class="section">
+
+      <div class="section-head">
+        <h3 class="section-title">
+          Önemli duraklar
+        </h3>
+      </div>
+
+      <div class="quick-grid">
+
+        <button
+          class="quick"
+          data-stop="Semih"
+        >
+          <span class="quick-icon">📍</span>
+          <span class="quick-name">Semih</span>
+        </button>
+
+        <button
+          class="quick"
+          data-stop="Öztekinler"
+        >
+          <span class="quick-icon">📍</span>
+          <span class="quick-name">Öztekinler</span>
+        </button>
+
+        <button
+          class="quick"
+          data-stop="Saraybosna"
+        >
+          <span class="quick-icon">📍</span>
+          <span class="quick-name">Saraybosna</span>
+        </button>
+
+        <button
+          class="quick"
+          data-stop="Kaşgarlı Mahmut"
+        >
+          <span class="quick-icon">🏫</span>
+          <span class="quick-name">
+            Kaşgarlı Mahmut
+          </span>
+        </button>
+
+        <button
+          class="quick"
+          data-stop="Numune Hastanesi"
+        >
+          <span class="quick-icon">🏥</span>
+          <span class="quick-name">
+            Numune Hastanesi
+          </span>
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- NEARBY -->
+
+    <section class="section">
+
+      <div class="section-head">
+        <h3 class="section-title">
+          Yakındaki duraklar
+        </h3>
+
+        <span
+          id="nearbyCaption"
+          class="section-caption"
+        >
+          Konum bekleniyor
+        </span>
+      </div>
+
+      <div
+        id="nearbyList"
+        class="list"
+      >
+        <div class="message">
+          Yakındaki durakları görmek için
+          konum izni ver.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- JOURNEYS -->
+
+    <section class="section">
+
+      <div class="section-head">
+        <h3 class="section-title">
+          Yolculuk seçenekleri
+        </h3>
+
+        <span
+          id="journeyCaption"
+          class="section-caption"
+        >
+          Henüz hesaplanmadı
+        </span>
+      </div>
+
+      <div
+        id="journeyList"
+        class="list"
+      >
+        <div class="message">
+          Önce konumunu ve hedef durağını seç.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SERVER STATUS -->
+
+    <section class="section">
+
+      <div class="section-head">
+        <h3 class="section-title">
+          Veri durumu
+        </h3>
+      </div>
+
+      <div
+        id="dataStatus"
+        class="data-status"
+      >
+        <div class="data-row">
+          <span>Sunucu</span>
+          <span>Kontrol ediliyor...</span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav-btn active"
+    data-nav="home"
+  >
+    <span class="nav-icon">🏠</span>
+    Ana Sayfa
+  </button>
+
+  <button
+    class="nav-btn"
+    data-nav="nearby"
+  >
+    <span class="nav-icon">📍</span>
+    Yakınımda
+  </button>
+
+  <button
+    class="nav-btn"
+    data-nav="journeys"
+  >
+    <span class="nav-icon">🧭</span>
+    Yolculuk
+  </button>
+
+</nav>
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   API
+========================================================= */
+
+const API = "/api";
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+  location: {
+    lat: null,
+    lon: null,
+    accuracy: null
+  },
+
+  selectedDestination: null,
+
+  nearbyStops: [],
+
+  server: {
+    ready: false,
+    loading: false
+  }
+};
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+const locationBtn =
+  $("locationBtn");
+
+const destinationSearch =
+  $("destinationSearch");
+
+const searchResults =
+  $("searchResults");
+
+const selectedDestination =
+  $("selectedDestination");
+
+const selectedDestinationName =
+  $("selectedDestinationName");
+
+const selectedDestinationMeta =
+  $("selectedDestinationMeta");
+
+const nearbyList =
+  $("nearbyList");
+
+const journeyList =
+  $("journeyList");
+
+const dataStatus =
+  $("dataStatus");
+
+const statusDot =
+  $("statusDot");
+
+/* =========================================================
+   FETCH HELPER
+========================================================= */
+
+async function api(
+  url,
+  options = {}
+) {
+  const controller =
+    new AbortController();
+
+  const timer =
+    setTimeout(
+      () => controller.abort(),
+      15000
+    );
+
+  try {
+    const response =
+      await fetch(
+        API + url,
+        {
+          ...options,
+          signal:
+            controller.signal,
+          headers: {
+            "Content-Type":
+              "application/json",
+            ...(options.headers || {})
+          }
+        }
+      );
+
+    let data = null;
+
+    try {
+      data =
+        await response.json();
+    } catch {
+      data = null;
+    }
+
+    if (!response.ok) {
+      const error =
+        data?.error ||
+        `Sunucu hatası (${response.status})`;
+
+      const err =
+        new Error(error);
+
+      err.status =
+        response.status;
+
+      err.data =
+        data;
+
+      throw err;
+    }
+
+    return data;
+
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+function toast(message) {
+  const el =
+    $("toast");
+
+  el.textContent =
+    message;
+
+  el.classList.add("show");
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      () =>
+        el.classList.remove(
+          "show"
+        ),
+      2800
+    );
+}
+
+/* =========================================================
+   SERVER HEALTH
+========================================================= */
+
+async function loadHealth() {
+  try {
+    const data =
+      await api(
+        "/health"
+      );
+
+    state.server.ready =
+      Boolean(data.ready);
+
+    state.server.loading =
+      Boolean(data.loading);
+
+    statusDot.className =
+      "status-dot " +
+      (
+        data.ready
+          ? "ok"
+          : data.error
+            ? "error"
+            : ""
+      );
+
+    renderDataStatus(data);
+
+    if (
+      data.ready &&
+      nearbyList.textContent.includes(
+        "Konum izni"
+      )
+    ) {
+      toast(
+        "Ulaşım verileri hazır."
+      );
+    }
+
+  } catch (error) {
+    statusDot.className =
+      "status-dot error";
+
+    dataStatus.innerHTML = `
+      <div class="data-row">
+        <span>Sunucu</span>
+        <span>Bağlantı kurulamadı</span>
+      </div>
+
+      <div class="data-row">
+        <span>Hata</span>
+        <span>${escapeHtml(error.message)}</span>
+      </div>
+    `;
+  }
+}
+
+function renderDataStatus(data) {
+  const stats =
+    data.stats || {};
+
+  dataStatus.innerHTML = `
+    <div class="data-row">
+      <span>Sunucu</span>
+      <span>
+        ${data.ready ? "Hazır ✓" : "Veri hazırlanıyor"}
+      </span>
+    </div>
+
+    <div class="data-row">
+      <span>Durak</span>
+      <span>${formatNumber(stats.stops || 0)}</span>
+    </div>
+
+    <div class="data-row">
+      <span>Hat</span>
+      <span>${formatNumber(stats.routes || 0)}</span>
+    </div>
+
+    <div class="data-row">
+      <span>Sefer</span>
+      <span>${formatNumber(stats.trips || 0)}</span>
+    </div>
+
+    <div class="data-row">
+      <span>Kaynak</span>
+      <span>
+        ${escapeHtml(
+          data.source?.name ||
+          "Konya Büyükşehir Belediyesi"
+        )}
+      </span>
+    </div>
+
+    <div class="data-row">
+      <span>Son güncelleme</span>
+      <span>
+        ${
+          data.lastSuccessfulLoad
+            ? formatDate(
+                data.lastSuccessfulLoad
+              )
+            : "Henüz yok"
+        }
+      </span>
+    </div>
+
+    ${
+      data.error && !data.ready
+        ? `
+          <div class="data-row">
+            <span>Durum</span>
+            <span>
+              ${escapeHtml(data.error)}
+            </span>
+          </div>
+        `
+        : ""
+    }
+  `;
+}
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function requestLocation() {
+  if (
+    !navigator.geolocation
+  ) {
+    toast(
+      "Bu cihazda konum özelliği desteklenmiyor."
+    );
+
+    return;
+  }
+
+  locationBtn.classList.add(
+    "loading"
+  );
+
+  locationBtn.textContent =
+    "📡 Konum alınıyor...";
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      state.location.lat =
+        position.coords.latitude;
+
+      state.location.lon =
+        position.coords.longitude;
+
+      state.location.accuracy =
+        position.coords.accuracy;
+
+      locationBtn.classList.remove(
+        "loading"
+      );
+
+      locationBtn.textContent =
+        "✓ Konum Alındı";
+
+      toast(
+        "Konum bulundu. Yakındaki duraklar getiriliyor."
+      );
+
+      loadNearbyStops();
+
+    },
+
+    error => {
+      locationBtn.classList.remove(
+        "loading"
+      );
+
+      locationBtn.textContent =
+        "📍 Konumumu Bul";
+
+      let message =
+        "Konum alınamadı.";
+
+      if (
+        error.code === 1
+      ) {
+        message =
+          "Konum izni verilmedi. Tarayıcı ayarlarından izin ver.";
+      } else if (
+        error.code === 2
+      ) {
+        message =
+          "Konum bilgisi bulunamadı.";
+      } else if (
+        error.code === 3
+      ) {
+        message =
+          "Konum isteği zaman aşımına uğradı.";
+      }
+
+      nearbyList.innerHTML = `
+        <div class="message error">
+          ${escapeHtml(message)}
+          <br>
+          <button
+            class="retry"
+            onclick="requestLocation()"
+          >
+            Tekrar Dene
+          </button>
+        </div>
+      `;
+
+      toast(message);
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 60000
+    }
+  );
+}
+
+/* =========================================================
+   NEARBY
+========================================================= */
+
+async function loadNearbyStops() {
+  const {
+    lat,
+    lon
+  } = state.location;
+
+  if (
+    lat === null ||
+    lon === null
+  ) {
+    return;
+  }
+
+  nearbyList.innerHTML = `
+    <div class="message">
+      📡 Yakındaki gerçek duraklar aranıyor...
+    </div>
+  `;
+
+  try {
+    const data =
+      await api(
+        `/stops/nearby?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&radius=3000`
+      );
+
+    state.nearbyStops =
+      Array.isArray(data.stops)
+        ? data.stops
+        : [];
+
+    $("nearbyCaption").textContent =
+      `${state.nearbyStops.length} durak`;
+
+    renderNearby();
+
+  } catch (error) {
+
+    nearbyList.innerHTML = `
+      <div class="message error">
+        <strong>Yakındaki duraklar alınamadı.</strong>
+        <br><br>
+        ${escapeHtml(error.message)}
+        <br>
+        <button
+          class="retry"
+          onclick="loadNearbyStops()"
+        >
+          Tekrar Dene
+        </button>
+      </div>
+    `;
+
+    $("nearbyCaption").textContent =
+      "Veri alınamadı";
+  }
+}
+
+function renderNearby() {
+  if (
+    !state.nearbyStops.length
+  ) {
+    nearbyList.innerHTML = `
+      <div class="message">
+        Konumunuza 3 km içinde durak bulunamadı.
+      </div>
+    `;
+
+    return;
+  }
+
+  nearbyList.innerHTML =
+    state.nearbyStops
+      .map(stop =>
+        stopCard(
+          stop,
+          true
+        )
+      )
+      .join("");
+}
+
+function stopCard(
+  stop,
+  showSelect
+) {
+  const routes =
+    Array.isArray(
+      stop.routes
+    )
+      ? stop.routes
+          .slice(0, 5)
+          .map(route => `
+            <span class="route-chip">
+              ${escapeHtml(
+                route.shortName
+              )}
+            </span>
+          `)
+          .join("")
+      : "";
+
+  return `
+    <div class="stop-card">
+
+      <div class="stop-icon">
+        🚏
+      </div>
+
+      <div class="stop-main">
+
+        <div class="stop-name">
+          ${escapeHtml(
+            stop.name
+          )}
+        </div>
+
+        <div class="stop-info">
+          ${
+            stop.distanceMeters != null
+              ? `${formatDistance(
+                  stop.distanceMeters
+                )} • yaklaşık ${
+                  stop.walkingMinutes
+                } dk yürüyüş`
+              : "Durak"
+          }
+        </div>
+
+        ${
+          routes
+            ? `
+              <div class="route-chips">
+                ${routes}
+              </div>
+            `
+            : ""
+        }
+
+        ${
+          showSelect
+            ? `
+              <button
+                class="select-stop"
+                onclick="selectDestinationById('${escapeAttr(stop.id)}')"
+              >
+                Hedef seç
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+
+      ${
+        stop.distanceMeters != null
+          ? `
+            <div class="distance">
+              <strong>
+                ${formatDistance(
+                  stop.distanceMeters
+                )}
+              </strong>
+              <span>
+                ${stop.walkingMinutes} dk
+              </span>
+            </div>
+          `
+          : ""
+      }
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+let searchTimer = null;
+
+destinationSearch.addEventListener(
+  "input",
+  () => {
+    clearTimeout(
+      searchTimer
+    );
+
+    const q =
+      destinationSearch.value.trim();
+
+    if (!q) {
+      searchResults.classList.remove(
+        "show"
+      );
+
+      searchResults.innerHTML =
+        "";
+
+      return;
+    }
+
+    searchTimer =
+      setTimeout(
+        () =>
+          searchStops(q),
+        250
+      );
+  }
+);
+
+async function searchStops(query) {
+  try {
+    const data =
+      await api(
+        `/stops?q=${encodeURIComponent(query)}&limit=12`
+      );
+
+    const stops =
+      Array.isArray(data.stops)
+        ? data.stops
+        : [];
+
+    if (!stops.length) {
+      searchResults.innerHTML = `
+        <div class="search-result">
+          <div class="result-name">
+            Durak bulunamadı
+          </div>
+          <div class="result-meta">
+            Farklı bir isim deneyebilirsin.
+          </div>
+        </div>
+      `;
+
+      searchResults.classList.add(
+        "show"
+      );
+
+      return;
+    }
+
+    searchResults.innerHTML =
+      stops
+        .map(stop => `
+          <button
+            class="search-result"
+            onclick="selectSearchStop('${escapeAttr(stop.id)}')"
+          >
+            <div class="result-name">
+              ${escapeHtml(
+                stop.name
+              )}
+            </div>
+
+            <div class="result-meta">
+              ${
+                stop.routes?.length
+                  ? stop.routes
+                      .slice(0, 5)
+                      .map(
+                        route =>
+                          escapeHtml(
+                            route.shortName
+                          )
+                      )
+                      .join(" • ")
+                  : "Hat bilgisi"
+              }
+            </div>
+          </button>
+        `)
+        .join("");
+
+    searchResults.classList.add(
+      "show"
+    );
+
+  } catch (error) {
+
+    searchResults.innerHTML = `
+      <div class="search-result">
+        <div class="result-name">
+          Arama yapılamadı
+        </div>
+
+        <div class="result-meta">
+          ${escapeHtml(error.message)}
+        </div>
+      </div>
+    `;
+
+    searchResults.classList.add(
+      "show"
+    );
+  }
+}
+
+/* =========================================================
+   SELECT DESTINATION
+========================================================= */
+
+async function selectSearchStop(id) {
+  const stop =
+    await getStop(id);
+
+  if (stop) {
+    selectDestination(stop);
+  }
+}
+
+async function selectDestinationById(id) {
+  const stop =
+    await getStop(id);
+
+  if (stop) {
+    selectDestination(stop);
+  }
+}
+
+async function getStop(id) {
+  const nearby =
+    state.nearbyStops.find(
+      stop =>
+        String(stop.id) ===
+        String(id)
+    );
+
+  if (nearby) {
+    return nearby;
+  }
+
+  try {
+    const data =
+      await api(
+        `/stops/${encodeURIComponent(id)}`
+      );
+
+    return data.stop || null;
+
+  } catch (error) {
+    toast(
+      error.message
+    );
+
+    return null;
+  }
+}
+
+function selectDestination(stop) {
+  state.selectedDestination =
+    stop;
+
+  destinationSearch.value =
+    stop.name;
+
+  selectedDestinationName.textContent =
+    stop.name;
+
+  selectedDestinationMeta.textContent =
+    stop.routes?.length
+      ? stop.routes
+          .slice(0, 8)
+          .map(
+            route =>
+              route.shortName
+          )
+          .join(" • ")
+      : "Durak";
+
+  selectedDestination.classList.add(
+    "show"
+  );
+
+  searchResults.classList.remove(
+    "show"
+  );
+
+  journeyList.innerHTML = `
+    <div class="message">
+      Hedef seçildi. Yolculuğu hesaplayabilirsin.
+    </div>
+  `;
+
+  $("journeyCaption").textContent =
+    "Hedef seçildi";
+
+  toast(
+    `${stop.name} hedef olarak seçildi.`
+  );
+}
+
+$("clearDestination").addEventListener(
+  "click",
+  () => {
+    state.selectedDestination =
+      null;
+
+    destinationSearch.value =
+      "";
+
+    selectedDestination.classList.remove(
+      "show"
+    );
+
+    journeyList.innerHTML = `
+      <div class="message">
+        Önce konumunu ve hedef durağını seç.
+      </div>
+    `;
+
+    $("journeyCaption").textContent =
+      "Henüz hesaplanmadı";
+  }
+);
+
+/* =========================================================
+   QUICK STOPS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".quick[data-stop]"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      async () => {
+
+        const name =
+          button.dataset.stop;
+
+        destinationSearch.value =
+          name;
+
+        await searchStops(
+          name
+        );
+      }
+    );
+  });
+
+/* =========================================================
+   JOURNEY
+========================================================= */
+
+$("findRouteBtn").addEventListener(
+  "click",
+  calculateJourney
+);
+
+async function calculateJourney() {
+  if (
+    !state.location.lat ||
+    !state.location.lon
+  ) {
+    toast(
+      "Önce konumunu bulmalısın."
+    );
+
+    requestLocation();
+
+    return;
+  }
+
+  if (
+    !state.selectedDestination
+  ) {
+    toast(
+      "Önce hedef durak seç."
+    );
+
+    return;
+  }
+
+  journeyList.innerHTML = `
+    <div class="message">
+      🧭 Gerçek GTFS seferleri hesaplanıyor...
+    </div>
+  `;
+
+  $("journeyCaption").textContent =
+    "Hesaplanıyor...";
+
+  try {
+
+    const data =
+      await api(
+        "/journey/calculate",
+        {
+          method: "POST",
+
+          body:
+            JSON.stringify({
+              origin: {
+                lat:
+                  state.location.lat,
+                lon:
+                  state.location.lon
+              },
+
+              destination: {
+                stopId:
+                  state.selectedDestination.id,
+
+                name:
+                  state.selectedDestination.name
+              },
+
+              importantStops: [
+                "Semih",
+                "Öztekinler",
+                "Saraybosna",
+                "Kaşgarlı Mahmut",
+                "Numune Hastanesi"
+              ],
+
+              routeDirection: {
+                checkOutbound: true,
+                checkInbound: true,
+                referenceStop:
+                  "Numune Hastanesi"
+              },
+
+              options: {
+                walking: true,
+                scheduledArrival: true,
+                liveArrival: true,
+                transferAnalysis: true,
+                directionValidation: true,
+                maxTransfers: 3,
+                rankBy:
+                  "totalDuration"
+              }
+            })
+        }
+      );
+
+    const journeys =
+      Array.isArray(
+        data.journeys
+      )
+        ? data.journeys
+        : [];
+
+    renderJourneys(
+      journeys
+    );
+
+  } catch (error) {
+
+    journeyList.innerHTML = `
+      <div class="message error">
+        <strong>
+          Yolculuk hesaplanamadı.
+        </strong>
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message
+        )}
+
+        <br>
+
+        <button
+          class="retry"
+          onclick="calculateJourney()"
+        >
+          Tekrar Hesapla
+        </button>
+      </div>
+    `;
+
+    $("journeyCaption").textContent =
+      "Hata";
+  }
+}
+
+/* =========================================================
+   JOURNEY RENDER
+========================================================= */
+
+function renderJourneys(
+  journeys
+) {
+  if (!journeys.length) {
+
+    journeyList.innerHTML = `
+      <div class="message">
+        Bu konumdan seçtiğin hedefe,
+        mevcut GTFS programında uygun
+        bir sefer bulunamadı.
+        <br><br>
+        Başka bir hedef durak veya
+        daha yakın bir başlangıç durağı deneyebilirsin.
+      </div>
+    `;
+
+    $("journeyCaption").textContent =
+      "Uygun sefer yok";
+
+    return;
+  }
+
+  $("journeyCaption").textContent =
+    `${journeys.length} seçenek`;
+
+  journeyList.innerHTML =
+    journeys
+      .map(
+        (journey, index) =>
+          journeyCard(
+            journey,
+            index
+          )
+      )
+      .join("");
+}
+
+function journeyCard(
+  journey,
+  index
+) {
+  const route =
+    journey.route ||
+    journey.legs?.[0]?.route ||
+    {};
+
+  const routeName =
+    route.longName ||
+    route.headsign ||
+    "Konya otobüs hattı";
+
+  const boarding =
+    journey.boardingStop?.name ||
+    journey.from?.name ||
+    "Başlangıç durağı";
+
+  const destination =
+    journey.to?.name ||
+    state.selectedDestination?.name ||
+    "Hedef";
+
+  const total =
+    journey.totalDurationMinutes;
+
+  const transferCount =
+    Number(
+      journey.transfers || 0
+    );
+
+  return `
+    <article class="journey-card">
+
+      <div class="journey-top">
+
+        <div>
+          <span class="route-number">
+            ${escapeHtml(
+              route.shortName ||
+              "—"
+            )}
+          </span>
+        </div>
+
+        <div class="journey-duration">
+          ${
+            Number.isFinite(total)
+              ? `${total} dk`
+              : "—"
+          }
+        </div>
+
+      </div>
+
+      <div class="journey-route-name">
+        ${escapeHtml(routeName)}
+      </div>
+
+      <div class="timeline">
+
+        <div class="time">
+          ${escapeHtml(
+            journey.departureTime ||
+            "--:--"
+          )}
+        </div>
+
+        <div class="place">
+          ${escapeHtml(
+            boarding
+          )}
+        </div>
+
+        <div></div>
+
+        <div class="journey-line"></div>
+
+        <div class="time">
+          ${escapeHtml(
+            journey.arrivalTime ||
+            "--:--"
+          )}
+        </div>
+
+        <div class="place">
+          ${escapeHtml(
+            destination
+          )}
+        </div>
+
+      </div>
+
+      <div class="journey-tags">
+
+        ${
+          Number.isFinite(
+            journey.walkingMinutes
+          )
+            ? `
+              <span class="journey-tag">
+                🚶 ${journey.walkingMinutes} dk yürüyüş
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          Number.isFinite(
+            journey.waitMinutes
+          )
+            ? `
+              <span class="journey-tag">
+                ⏳ ${journey.waitMinutes} dk bekleme
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          Number.isFinite(
+            journey.rideMinutes
+          )
+            ? `
+              <span class="journey-tag">
+                🚌 ${journey.rideMinutes} dk otobüs
+              </span>
+            `
+            : ""
+        }
+
+        <span class="journey-tag">
+          ${
+            transferCount === 0
+              ? "Direkt"
+              : `${transferCount} aktarma`
+          }
+        </span>
+
+        <span class="journey-tag">
+          📅 Programlı sefer
+        </span>
+
+      </div>
+
+      ${
+        journey.boardingStop
+          ? `
+            <div class="journey-tags">
+              <span class="journey-tag">
+                🚏 Biniş:
+                ${escapeHtml(
+                  journey.boardingStop.name
+                )}
+              </span>
+            </div>
+          `
+          : ""
+      }
+
+    </article>
+  `;
+}
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".nav-btn"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(
+            ".nav-btn"
+          )
+          .forEach(
+            btn =>
+              btn.classList.remove(
+                "active"
+              )
+          );
+
+        button.classList.add(
+          "active"
+        );
+
+        const nav =
+          button.dataset.nav;
+
+        if (
+          nav === "nearby"
+        ) {
+          document
+            .querySelector(
+              ".section:nth-of-type(4)"
+            )
+            ?.scrollIntoView({
+              behavior:
+                "smooth"
+            });
+
+          if (
+            state.location.lat === null
+          ) {
+            requestLocation();
+          }
+
+        } else if (
+          nav === "journeys"
+        ) {
+          document
+            .querySelector(
+              ".section:nth-of-type(5)"
+            )
+            ?.scrollIntoView({
+              behavior:
+                "smooth"
+            });
+
+        } else {
+          window.scrollTo({
+            top: 0,
+            behavior:
+              "smooth"
+          });
+        }
+      }
+    );
+  });
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function formatNumber(value) {
+  return Number(
+    value || 0
+  ).toLocaleString(
+    "tr-TR"
+  );
+}
+
+function formatDistance(
+  meters
+) {
+  if (
+    !Number.isFinite(
+      Number(meters)
+    )
+  ) {
+    return "—";
+  }
+
+  const m =
+    Number(meters);
+
+  if (m < 1000) {
+    return `${Math.round(m)} m`;
+  }
+
+  return (
+    (m / 1000)
+      .toFixed(1)
+      .replace(".", ",") +
+    " km"
+  );
+}
+
+function formatDate(
+  value
+) {
+  try {
+    return new Intl.DateTimeFormat(
+      "tr-TR",
+      {
+        dateStyle: "short",
+        timeStyle: "short",
+        timeZone:
+          "Europe/Istanbul"
+      }
+    ).format(
+      new Date(value)
+    );
+  } catch {
+    return "—";
+  }
+}
+
+function escapeHtml(
+  value
+) {
+  return String(
+    value ?? ""
+  )
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+function escapeAttr(
+  value
+) {
+  return String(
+    value ?? ""
+  )
+    .replaceAll("\\", "\\\\")
+    .replaceAll("'", "\\'");
+}
+
+/* =========================================================
+   OUTSIDE SEARCH CLICK
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !event.target.closest(
+        ".search-box"
+      ) &&
+      !event.target.closest(
+        ".search-results"
+      )
+    ) {
+      searchResults.classList.remove(
+        "show"
+      );
+    }
+  }
+);
+
+/* =========================================================
+   START
+========================================================= */
+
+locationBtn.addEventListener(
+  "click",
+  requestLocation
+);
+
+loadHealth();
+
+/*
+  Sunucu yeni açıldıysa GTFS'nin
+  hazırlanmasını bekleyip tekrar kontrol.
+*/
+
+setInterval(
+  loadHealth,
+  15000
+);
+
+</script>
+
+</body>
+</html>
