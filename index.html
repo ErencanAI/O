@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="Konya Ulaşım Plus - Akıllı toplu taşıma asistanı">
+
+  <title>Konya Ulaşım Plus</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #718096;
+      --primary: #1769ff;
+      --primary-dark: #0f4dcc;
+      --border: #e7ebf2;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --shadow: 0 8px 30px rgba(15, 23, 42, .08);
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 620px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg);
+      padding-bottom: 92px;
+    }
+
+    .top {
+      padding: 22px 18px 24px;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(255,255,255,.16), transparent 32%),
+        linear-gradient(145deg, #0f172a, #1769ff);
+      border-radius: 0 0 28px 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: rgba(255,255,255,.14);
+      font-size: 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+    }
+
+    .brand p {
+      margin-top: 2px;
+      font-size: 12px;
+      opacity: .72;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 0 5px rgba(251,191,36,.12);
+    }
+
+    .status-dot.online {
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34,197,94,.12);
+    }
+
+    .hero-title {
+      font-size: 28px;
+      line-height: 1.12;
+      font-weight: 850;
+      letter-spacing: -.8px;
+      margin-bottom: 9px;
+    }
+
+    .hero-text {
+      font-size: 14px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.78);
+      max-width: 470px;
+    }
+
+    .location-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: white;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 16px;
+      text-align: left;
+      backdrop-filter: blur(12px);
+    }
+
+    .location-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.12);
+      border-radius: 12px;
+      font-size: 18px;
+    }
+
+    .location-btn strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .location-btn span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      opacity: .68;
+    }
+
+    .content {
+      padding: 18px;
+    }
+
+    .search-card {
+      margin-top: -2px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .search-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .search-title strong {
+      font-size: 15px;
+    }
+
+    .search-title span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 50px;
+      padding: 0 46px 0 44px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      outline: none;
+      color: var(--text);
+      background: #f8fafc;
+      transition: .2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(23,105,255,.08);
+    }
+
+    .search-symbol {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      display: none;
+    }
+
+    .results {
+      margin-top: 8px;
+      max-height: 330px;
+      overflow-y: auto;
+    }
+
+    .result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 8px;
+      border-bottom: 1px solid #f0f2f5;
+      background: white;
+      text-align: left;
+    }
+
+    .result-item:last-child {
+      border-bottom: 0;
+    }
+
+    .stop-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      background: #edf4ff;
+      color: var(--primary);
+    }
+
+    .result-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .result-info strong {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 13px;
+    }
+
+    .result-info span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+
+    .section-head h2 {
+      font-size: 17px;
+      letter-spacing: -.25px;
+    }
+
+    .section-head button {
+      background: transparent;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nearby-card {
+      padding: 15px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 22px rgba(15,23,42,.05);
+    }
+
+    .nearby-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nearby-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .nearby-main strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .nearby-main span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .distance {
+      padding: 7px 9px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .empty {
+      padding: 25px 15px;
+      border: 1px dashed #d8dee8;
+      border-radius: 18px;
+      text-align: center;
+      background: rgba(255,255,255,.7);
+    }
+
+    .empty-icon {
+      font-size: 25px;
+      margin-bottom: 7px;
+    }
+
+    .empty strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .empty p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .quick {
+      min-height: 92px;
+      padding: 14px;
+      text-align: left;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: white;
+      box-shadow: 0 5px 18px rgba(15,23,42,.04);
+    }
+
+    .quick-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #f1f5f9;
+      margin-bottom: 9px;
+    }
+
+    .quick strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .quick span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .data-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: #111827;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .data-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .data-header strong {
+      font-size: 14px;
+    }
+
+    .data-badge {
+      padding: 5px 8px;
+      border-radius: 8px;
+      font-size: 10px;
+      background: rgba(255,255,255,.08);
+      color: #cbd5e1;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .data-item {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .data-item span {
+      display: block;
+      color: #94a3b8;
+      font-size: 9px;
+    }
+
+    .data-item strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 15px;
+    }
+
+    .source {
+      margin-top: 12px;
+      color: #94a3b8;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .route-panel {
+      display: none;
+    }
+
+    .route-panel.active {
+      display: block;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 15px;
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .stop-detail {
+      padding: 17px;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stop-detail h2 {
+      font-size: 19px;
+    }
+
+    .stop-detail .id {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .line-list {
+      margin-top: 15px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      border-radius: 13px;
+      background: #f8fafc;
+    }
+
+    .line-number {
+      min-width: 42px;
+      padding: 6px;
+      border-radius: 8px;
+      text-align: center;
+      background: #eaf2ff;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .line-name {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 50;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(620px, 100%);
+      padding: 9px 14px calc(9px + env(safe-area-inset-bottom));
+      background: rgba(255,255,255,.94);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .nav-item {
+      padding: 6px 4px;
+      background: transparent;
+      color: #8a94a6;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 20px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 82px;
+      transform: translate(-50%, 15px);
+      width: calc(100% - 36px);
+      max-width: 520px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: #111827;
+      color: white;
+      font-size: 12px;
+      line-height: 1.4;
+      box-shadow: 0 12px 30px rgba(0,0,0,.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #dbeafe;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (min-width: 700px) {
+      body {
+        background: #e9eef6;
+      }
+
+      .app {
+        box-shadow: 0 0 45px rgba(15,23,42,.08);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-left">
+        <div class="logo">🚌</div>
+        <div>
+          <h1>Konya Ulaşım Plus</h1>
+          <p>Akıllı toplu taşıma asistanı</p>
+        </div>
+      </div>
+
+      <div id="statusDot" class="status-dot"></div>
+    </div>
+
+    <div class="hero-title">
+      Konya'da yolculuğunu planla
+    </div>
+
+    <div class="hero-text">
+      Konumundan en yakın durakları bul, hedefini seç ve mevcut resmî ulaşım verilerine göre yolculuğunu planla.
+    </div>
+
+    <button class="location-btn" id="locationBtn">
+      <div class="location-icon">📍</div>
+      <div>
+        <strong id="locationTitle">Konumumu kullan</strong>
+        <span id="locationText">Yakındaki durakları bulmak için konum izni ver</span>
+      </div>
+    </button>
+  </header>
+
+  <main class="content">
+
+    <section id="homePanel">
+
+      <div class="search-card">
+        <div class="search-title">
+          <strong>Durak ara</strong>
+          <span>Tüm duraklar</span>
+        </div>
+
+        <div class="search-box">
+          <span class="search-symbol">🔎</span>
+
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Durak adı veya durak kodu..."
+          >
+
+          <button id="clearSearch" class="clear-search">✕</button>
+        </div>
+
+        <div id="searchResults" class="results"></div>
+      </div>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Yakınımdaki duraklar</h2>
+          <button id="refreshNearby">Yenile</button>
+        </div>
+
+        <div id="nearbyContainer">
+          <div class="empty">
+            <div class="empty-icon">📍</div>
+            <strong>Konum gerekli</strong>
+            <p>En yakın durakları görebilmek için yukarıdaki konum düğmesini kullan.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Hızlı erişim</h2>
+        </div>
+
+        <div class="quick-grid">
+          <button class="quick" data-search="Semih">
+            <div class="quick-icon">🚏</div>
+            <strong>Semih</strong>
+            <span>Durakları ara</span>
+          </button>
+
+          <button class="quick" data-search="Öztekinler">
+            <div class="quick-icon">🚏</div>
+            <strong>Öztekinler</strong>
+            <span>Durakları ara</span>
+          </button>
+
+          <button class="quick" data-search="Saraybosna">
+            <div class="quick-icon">🚏</div>
+            <strong>Saraybosna</strong>
+            <span>Durakları ara</span>
+          </button>
+
+          <button class="quick" data-search="Kaşgarlı Mahmut">
+            <div class="quick-icon">🚏</div>
+            <strong>Kaşgarlı Mahmut</strong>
+            <span>Durakları ara</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="data-card">
+          <div class="data-header">
+            <strong>Veri durumu</strong>
+            <span id="dataBadge" class="data-badge">Kontrol ediliyor</span>
+          </div>
+
+          <div class="data-grid">
+            <div class="data-item">
+              <span>Durak</span>
+              <strong id="stopCount">—</strong>
+            </div>
+
+            <div class="data-item">
+              <span>Hat</span>
+              <strong id="routeCount">—</strong>
+            </div>
+
+            <div class="data-item">
+              <span>Sefer</span>
+              <strong id="tripCount">—</strong>
+            </div>
+          </div>
+
+          <div id="dataSource" class="source">
+            Resmî Konya ulaşım verisi kontrol ediliyor...
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <section id="detailPanel" class="route-panel">
+
+      <button id="backBtn" class="back-btn">
+        ← Geri
+      </button>
+
+      <div id="stopDetail"></div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-grid">
+
+    <button class="nav-item active" data-nav="home">
+      <span class="nav-icon">⌂</span>
+      Ana Sayfa
+    </button>
+
+    <button class="nav-item" data-nav="nearby">
+      <span class="nav-icon">📍</span>
+      Yakınımda
+    </button>
+
+    <button class="nav-item" data-nav="journey">
+      <span class="nav-icon">🧭</span>
+      Yolculuk
+    </button>
+
+  </div>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  "use strict";
+
+  const state = {
+    latitude: null,
+    longitude: null,
+    locationReady: false,
+    searchTimer: null
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function showToast(message) {
+    const toast = $("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(showToast.timer);
+
+    showToast.timer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 3000);
+  }
+
+  async function api(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Accept": "application/json",
+        ...(options.headers || {})
+      }
+    });
+
+    let data = null;
+
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Sunucudan geçerli JSON yanıtı alınamadı.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.message || data?.error || "Sunucu hatası.");
+    }
+
+    return data;
+  }
+
+  function formatDistance(meters) {
+    if (!Number.isFinite(Number(meters))) {
+      return "—";
+    }
+
+    const value = Number(meters);
+
+    if (value < 1000) {
+      return Math.round(value) + " m";
+    }
+
+    return (value / 1000).toFixed(1).replace(".", ",") + " km";
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function normalizeStop(stop) {
+    return {
+      id: stop.id ?? stop.stop_id ?? "",
+      name: stop.name ?? stop.stop_name ?? "İsimsiz durak",
+      code: stop.code ?? stop.stop_code ?? "",
+      lat: Number(stop.lat ?? stop.stop_lat),
+      lon: Number(stop.lon ?? stop.stop_lon),
+      distance: Number(stop.distance ?? NaN)
+    };
+  }
+
+  async function loadDataStatus() {
+    try {
+      const data = await api("/api/data-status");
+
+      const stops =
+        data.stopCount ??
+        data.stops ??
+        data.counts?.stops ??
+        0;
+
+      const routes =
+        data.routeCount ??
+        data.routes ??
+        data.counts?.routes ??
+        0;
+
+      const trips =
+        data.tripCount ??
+        data.trips ??
+        data.counts?.trips ??
+        0;
+
+      $("stopCount").textContent = Number(stops).toLocaleString("tr-TR");
+      $("routeCount").textContent = Number(routes).toLocaleString("tr-TR");
+      $("tripCount").textContent = Number(trips).toLocaleString("tr-TR");
+
+      const available =
+        data.available === true ||
+        data.ready === true ||
+        Number(stops) > 0;
+
+      $("dataBadge").textContent =
+        available ? "Hazır" : "Veri bekleniyor";
+
+      $("statusDot").classList.toggle("online", available);
+
+      $("dataSource").textContent =
+        data.source ||
+        data.message ||
+        "Konya Büyükşehir Belediyesi Açık Veri / ATUS";
+    } catch (error) {
+      $("dataBadge").textContent = "Bağlantı bekleniyor";
+      $("dataSource").textContent =
+        "Ulaşım sunucusuna şu anda erişilemiyor.";
+    }
+  }
+
+  async function searchStops(query) {
+    const value = query.trim();
+
+    if (!value) {
+      $("searchResults").innerHTML = "";
+      return;
+    }
+
+    $("searchResults").innerHTML =
+      '<div style="padding:14px;color:#718096;font-size:12px;">' +
+      '<span class="loading"></span>Duraklar aranıyor...' +
+      "</div>";
+
+    try {
+      const data = await api(
+        "/api/stops?search=" + encodeURIComponent(value)
+      );
+
+      const rawStops =
+        Array.isArray(data) ? data :
+        Array.isArray(data.stops) ? data.stops :
+        Array.isArray(data.results) ? data.results :
+        [];
+
+      const stops = rawStops.map(normalizeStop);
+
+      if (!stops.length) {
+        $("searchResults").innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🔎</div>
+            <strong>Durak bulunamadı</strong>
+            <p>Arama kelimesini veya durak kodunu kontrol et.</p>
+          </div>
+        `;
+        return;
+      }
+
+      $("searchResults").innerHTML = stops.slice(0, 30).map(stop => `
+        <button class="result-item" data-stop-id="${escapeHtml(stop.id)}">
+          <div class="stop-icon">🚏</div>
+          <div class="result-info">
+            <strong>${escapeHtml(stop.name)}</strong>
+            <span>
+              ${stop.code ? "Kod: " + escapeHtml(stop.code) : "Durak"}
+            </span>
+          </div>
+          <span>›</span>
+        </button>
+      `).join("");
+
+      document.querySelectorAll(".result-item").forEach(button => {
+        button.addEventListener("click", () => {
+          openStop(button.dataset.stopId);
+        });
+      });
+
+    } catch (error) {
+      $("searchResults").innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">⚠️</div>
+          <strong>Arama yapılamadı</strong>
+          <p>${escapeHtml(error.message)}</p>
+        </div>
+      `;
+    }
+  }
+
+  async function loadNearby() {
+    if (!state.locationReady) {
+      $("nearbyContainer").innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">📍</div>
+          <strong>Konum gerekli</strong>
+          <p>Yakındaki durakları göstermek için konumunu etkinleştir.</p>
+        </div>
+      `;
+      return;
+    }
+
+    $("nearbyContainer").innerHTML = `
+      <div class="nearby-card">
+        <span class="loading"></span>
+        Yakındaki duraklar aranıyor...
+      </div>
+    `;
+
+    try {
+      const url =
+        "/api/stops/nearby" +
+        "?lat=" + encodeURIComponent(state.latitude) +
+        "&lon=" + encodeURIComponent(state.longitude) +
+        "&limit=10";
+
+      const data = await api(url);
+
+      const rawStops =
+        Array.isArray(data) ? data :
+        Array.isArray(data.stops) ? data.stops :
+        Array.isArray(data.results) ? data.results :
+        [];
+
+      const stops = rawStops.map(normalizeStop);
+
+      if (!stops.length) {
+        $("nearbyContainer").innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🚏</div>
+            <strong>Yakında durak bulunamadı</strong>
+            <p>Sunucuda kullanılabilir resmî durak verisi bulunmuyor.</p>
+          </div>
+        `;
+        return;
+      }
+
+      $("nearbyContainer").innerHTML = stops.map(stop => `
+        <button
+          class="nearby-card"
+          style="width:100%;text-align:left;margin-bottom:8px;"
+          data-stop-id="${escapeHtml(stop.id)}"
+        >
+          <div class="nearby-top">
+            <div class="stop-icon">🚏</div>
+
+            <div class="nearby-main">
+              <strong>${escapeHtml(stop.name)}</strong>
+              <span>
+                ${stop.code ? "Durak kodu: " + escapeHtml(stop.code) : "Konya toplu taşıma durağı"}
+              </span>
+            </div>
+
+            <div class="distance">
+              ${formatDistance(stop.distance)}
+            </div>
+          </div>
+        </button>
+      `).join("");
+
+      document.querySelectorAll("#nearbyContainer [data-stop-id]")
+        .forEach(button => {
+          button.addEventListener("click", () => {
+            openStop(button.dataset.stopId);
+          });
+        });
+
+    } catch (error) {
+      $("nearbyContainer").innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">⚠️</div>
+          <strong>Durak verisi alınamadı</strong>
+          <p>${escapeHtml(error.message)}</p>
+        </div>
+      `;
+    }
+  }
+
+  function requestLocation() {
+    if (!navigator.geolocation) {
+      showToast("Bu cihazda konum özelliği desteklenmiyor.");
+      return;
+    }
+
+    $("locationTitle").textContent = "Konum alınıyor...";
+    $("locationText").textContent = "Lütfen birkaç saniye bekle.";
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        state.latitude = position.coords.latitude;
+        state.longitude = position.coords.longitude;
+        state.locationReady = true;
+
+        $("locationTitle").textContent = "Konum hazır";
+        $("locationText").textContent =
+          "Yakındaki duraklar güncelleniyor.";
+
+        showToast("Konum başarıyla alındı.");
+
+        loadNearby();
+      },
+      error => {
+        state.locationReady = false;
+
+        $("locationTitle").textContent = "Konumumu kullan";
+
+        if (error.code === 1) {
+          $("locationText").textContent =
+            "Konum izni verilmedi.";
+          showToast("Konum izni verilmedi.");
+        } else {
+          $("locationText").textContent =
+            "Konum alınamadı. Tekrar deneyebilirsin.";
+          showToast("Konum alınamadı.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 30000
+      }
+    );
+  }
+
+  async function openStop(stopId) {
+    if (!stopId) return;
+
+    $("homePanel").style.display = "none";
+    $("detailPanel").classList.add("active");
+
+    $("stopDetail").innerHTML = `
+      <div class="stop-detail">
+        <span class="loading"></span>
+        Durak bilgileri yükleniyor...
+      </div>
+    `;
+
+    try {
+      const data = await api(
+        "/api/stops/" + encodeURIComponent(stopId)
+      );
+
+      const stop = normalizeStop(data.stop || data);
+
+      const rawRoutes =
+        Array.isArray(data.routes) ? data.routes :
+        Array.isArray(data.lines) ? data.lines :
+        [];
+
+      $("stopDetail").innerHTML = `
+        <div class="stop-detail">
+          <h2>${escapeHtml(stop.name)}</h2>
+
+          <div class="id">
+            ${stop.code ? "Durak kodu: " + escapeHtml(stop.code) : "Durak ID: " + escapeHtml(stop.id)}
+          </div>
+
+          ${
+            rawRoutes.length
+              ? `
+                <div class="line-list">
+                  ${rawRoutes.map(route => `
+                    <div class="line">
+                      <div class="line-number">
+                        ${escapeHtml(route.shortName ?? route.route_short_name ?? route.id ?? "—")}
+                      </div>
+                      <div class="line-name">
+                        ${escapeHtml(route.longName ?? route.route_long_name ?? route.name ?? "Hat")}
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+              `
+              : `
+                <div class="empty" style="margin-top:15px;">
+                  <div class="empty-icon">🚌</div>
+                  <strong>Hat bilgisi bulunamadı</strong>
+                  <p>Bu durak için kullanılabilir resmî hat verisi yok.</p>
+                </div>
+              `
+          }
+        </div>
+      `;
+
+    } catch (error) {
+      $("stopDetail").innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">⚠️</div>
+          <strong>Durak bilgisi alınamadı</strong>
+          <p>${escapeHtml(error.message)}</p>
+        </div>
+      `;
+    }
+  }
+
+  function closeDetail() {
+    $("detailPanel").classList.remove("active");
+    $("homePanel").style.display = "block";
+  }
+
+  function setupSearch() {
+    $("searchInput").addEventListener("input", event => {
+      const value = event.target.value;
+
+      $("clearSearch").style.display =
+        value ? "block" : "none";
+
+      clearTimeout(state.searchTimer);
+
+      state.searchTimer = setTimeout(() => {
+        searchStops(value);
+      }, 300);
+    });
+
+    $("clearSearch").addEventListener("click", () => {
+      $("searchInput").value = "";
+      $("clearSearch").style.display = "none";
+      $("searchResults").innerHTML = "";
+      $("searchInput").focus();
+    });
+  }
+
+  function setupQuickSearch() {
+    document.querySelectorAll("[data-search]").forEach(button => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.search;
+
+        $("searchInput").value = value;
+        $("clearSearch").style.display = "block";
+
+        searchStops(value);
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    });
+  }
+
+  function setupNavigation() {
+    document.querySelectorAll(".nav-item").forEach(button => {
+      button.addEventListener("click", () => {
+
+        document.querySelectorAll(".nav-item")
+          .forEach(item => item.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const nav = button.dataset.nav;
+
+        if (nav === "home") {
+          closeDetail();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        if (nav === "nearby") {
+          closeDetail();
+
+          document.querySelector("#nearbyContainer")
+            ?.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+          if (state.locationReady) {
+            loadNearby();
+          } else {
+            requestLocation();
+          }
+        }
+
+        if (nav === "journey") {
+          showToast("Yolculuk planlama ekranı hazırlanıyor.");
+        }
+      });
+    });
+  }
+
+  async function init() {
+    $("locationBtn").addEventListener(
+      "click",
+      requestLocation
+    );
+
+    $("refreshNearby").addEventListener(
+      "click",
+      loadNearby
+    );
+
+    $("backBtn").addEventListener(
+      "click",
+      closeDetail
+    );
+
+    setupSearch();
+    setupQuickSearch();
+    setupNavigation();
+
+    await loadDataStatus();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>
